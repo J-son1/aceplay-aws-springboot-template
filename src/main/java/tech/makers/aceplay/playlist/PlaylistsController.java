@@ -23,11 +23,6 @@ public class PlaylistsController {
     return playlistRepository.findAll();
   }
 
-  // @PostMapping("/api/playlists")
-  // public Playlist create(@RequestBody Playlist playlist) {
-  // return playlistRepository.save(playlist);
-  // }
-
   @PostMapping("api/playlists")
   public Playlist create(@RequestBody PlaylistDTO playlistDTO) {
     Playlist playlist = new Playlist();
