@@ -25,6 +25,16 @@ public class PlaylistsController {
     return playlistRepository.save(playlist);
   }
 
+  @GetMapping("/api/playlists/cool")
+  public Iterable<Playlist> coolPlaylists() {
+    return playlistRepository.findAll();
+  }
+
+  @GetMapping("/api/playlists/uncool")
+  public Iterable<Playlist> uncoolPlaylists() {
+    return playlistRepository.findAll();
+  }
+
   @GetMapping("/api/playlists/{id}")
   public Playlist get(@PathVariable Long id) {
     return playlistRepository.findById(id)

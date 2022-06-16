@@ -14,6 +14,7 @@ public class Playlist {
   private Long id;
 
   private String name;
+  private Boolean cool;
 
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<Track> tracks;
@@ -21,12 +22,17 @@ public class Playlist {
   public Playlist() {}
 
   public Playlist(String name) {
-    this(name, null);
+    this(name, null, true);
   }
 
   public Playlist(String name, Set<Track> tracks) {
+    this(name, tracks, true);
+  }
+
+  public Playlist(String name, Set<Track> tracks, Boolean isCool) {
     this.name = name;
     this.tracks = tracks;
+    this.cool = isCool;
   }
 
   public String getName() {
@@ -39,6 +45,14 @@ public class Playlist {
 
   public Long getId() {
     return id;
+  }
+
+  public Boolean getCool() {
+    return this.cool;
+  }
+
+  public void setCool(Boolean isCool) {
+    this.cool = isCool;
   }
 
   @JsonGetter("tracks")

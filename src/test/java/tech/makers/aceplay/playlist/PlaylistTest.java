@@ -16,6 +16,16 @@ class PlaylistTest {
     assertEquals("Hello, world!", subject.getName());
     assertEquals(Set.of(), subject.getTracks());
     assertEquals(null, subject.getId());
+    assertEquals(true, subject.getCool());
+  }
+
+  @Test
+  void testSetsCoolness() {
+    Playlist subject = new Playlist("Hello, world!");
+    assertEquals(true, subject.getCool());
+
+    subject.setCool(false);
+    assertEquals(false, subject.getCool());
   }
 
   @Test
