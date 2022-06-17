@@ -1,5 +1,6 @@
 package tech.makers.aceplay.track;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,12 +18,14 @@ public class TracksController {
   }
 
   @PostMapping("/api/tracks")
-  public Track create(@RequestBody Track track) {
+  public Track create(@RequestBody TrackDTO trackDTO) {
+    Track track = new Track();
+    BeanUtils.copyProperties(trackDTO, track);
     return trackRepository.save(track);
   }
 
   @PatchMapping("/api/tracks/{id}")
-  public Track update(@PathVariable Long id, @RequestBody Track newTrack) {
+  public Track update(@PathVariable Long id, @RequestBody TrackDTO newTrack) {
     Track track = trackRepository
             .findById(id)
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "No track exists with id " + id));
