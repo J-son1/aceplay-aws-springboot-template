@@ -1,5 +1,6 @@
 package tech.makers.aceplay.user;
 
+// import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class UsersController {
   private PasswordEncoder passwordEncoder;
 
   @PostMapping("/api/users")
-  public Session create(@RequestBody User user) {
-    user = new User(user.getUsername(), passwordEncoder.encode(user.getPassword()));
+  public Session create(@RequestBody UserDTO userDTO) {
+    User user = new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()));
     userRepository.save(user);
     String token = sessionService.generateToken(user.getUsername());
     return new Session(user, token);
