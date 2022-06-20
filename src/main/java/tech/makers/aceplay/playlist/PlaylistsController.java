@@ -57,4 +57,10 @@ public class PlaylistsController {
     playlistRepository.save(playlist);
     return track;
   }
+
+  @DeleteMapping(path = "/api/playlists/{id}")
+  public void deleteTrack(@PathVariable Long id) {
+    playlistRepository.deleteById(id);
+  }
+
 }
