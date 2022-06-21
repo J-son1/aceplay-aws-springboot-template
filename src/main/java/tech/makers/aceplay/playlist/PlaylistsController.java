@@ -2,12 +2,17 @@ package tech.makers.aceplay.playlist;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import tech.makers.aceplay.track.Track;
 import tech.makers.aceplay.track.TrackRepository;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 // https://www.youtube.com/watch?v=vreyOZxdb5Y&t=0s
 @RestController
@@ -24,7 +29,7 @@ public class PlaylistsController {
   }
 
   @PostMapping("api/playlists")
-  public Playlist create(@RequestBody PlaylistDTO playlistDTO) {
+  public Playlist create(@Valid @RequestBody PlaylistDTO playlistDTO) throws Exception {
     Playlist playlist = new Playlist();
     BeanUtils.copyProperties(playlistDTO, playlist);
     return playlistRepository.save(playlist);
@@ -61,6 +66,12 @@ public class PlaylistsController {
   @DeleteMapping(path = "/api/playlists/{id}")
   public void deleteTrack(@PathVariable Long id) {
     playlistRepository.deleteById(id);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  ResponseEntity<ConstraintViolationException> handleConstraintViolationException(ConstraintViolationException e) {
+    return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
   }
 
 }
