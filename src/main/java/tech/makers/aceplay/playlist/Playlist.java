@@ -2,8 +2,11 @@ package tech.makers.aceplay.playlist;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import tech.makers.aceplay.track.Track;
+import tech.makers.aceplay.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+
 import java.util.Set;
 
 // https://www.youtube.com/watch?v=vreyOZxdb5Y&t=448s
@@ -13,26 +16,33 @@ public class Playlist {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotBlank(message = "Name should not be blank")
   private String name;
   private Boolean cool;
 
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<Track> tracks;
 
-  public Playlist() {}
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-  public Playlist(String name) {
-    this(name, null, true);
+  public Playlist() {
   }
 
-  public Playlist(String name, Set<Track> tracks) {
-    this(name, tracks, true);
+  public Playlist(String name, User user) {
+    this(name, null, true, user);
   }
 
-  public Playlist(String name, Set<Track> tracks, Boolean isCool) {
+  public Playlist(String name, Set<Track> tracks, User user) {
+    this(name, tracks, true, user);
+  }
+
+  public Playlist(String name, Set<Track> tracks, Boolean isCool, User user) {
     this.name = name;
     this.tracks = tracks;
     this.cool = isCool;
+    this.user = user;
   }
 
   public String getName() {
