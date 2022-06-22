@@ -63,4 +63,16 @@ public class PlaylistsController {
     playlistRepository.deleteById(id);
   }
 
+  // can delete track from playlist
+  @DeleteMapping(path = "/api/playlists/{id}/tracks/{trackId}")
+  public void deleteTrack(@PathVariable Long id, @PathVariable Long trackId) {
+    Playlist playlist = playlistRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "No playlist exists with id " + id));
+    Track track = trackRepository.findById(trackId)
+        .orElseThrow(
+            () -> new ResponseStatusException(NOT_FOUND, "No track exists with id " + trackId));
+    playlist.getTracks().remove(track);
+    playlistRepository.save(playlist);
+  }
+
 }

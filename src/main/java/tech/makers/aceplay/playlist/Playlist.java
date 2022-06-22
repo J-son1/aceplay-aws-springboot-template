@@ -67,4 +67,9 @@ public class Playlist {
   public String toString() {
     return String.format("Playlist[id=%d name='%s']", id, name);
   }
+
+  // delete track from playlist
+  public void deleteTrack(Track track) {
+    this.tracks.remove(track);
+  }
 }
