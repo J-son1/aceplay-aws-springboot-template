@@ -13,12 +13,13 @@ import javax.validation.ValidatorFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // https://www.youtube.com/watch?v=L4vkcgRnw2g&t=1099s
 class PlaylistTest {
-  
+
   private Validator validator;
-  
+
   @Test
   void testConstructs() {
     Playlist subject = new Playlist("Hello, world!", Set.of());
@@ -33,9 +34,14 @@ class PlaylistTest {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
 
+    Playlist subject2 = new Playlist("TEST", Set.of());
+    Set<ConstraintViolation<Playlist>> violations2 = validator.validate(subject2);
+    assertTrue(violations2.size() == 0);
+
     Playlist subject = new Playlist(" ", Set.of());
     Set<ConstraintViolation<Playlist>> violations = validator.validate(subject);
-        assertFalse(violations.isEmpty());
+    assertFalse(violations.isEmpty());
+
   }
 
   @Test
@@ -55,4 +61,3 @@ class PlaylistTest {
         subject.toString());
   }
 }
-

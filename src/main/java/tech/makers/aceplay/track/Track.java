@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -20,7 +22,8 @@ public class Track {
 
   private URL publicUrl;
 
-  public Track() { }
+  public Track() {
+  }
 
   public Track(String title, String artist, URL publicUrl) {
     this.title = title;
