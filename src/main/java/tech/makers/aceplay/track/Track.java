@@ -5,10 +5,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import javax.validation.constraints.NotBlank;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import tech.makers.aceplay.user.User;
+
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,15 +24,22 @@ public class Track {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotBlank
   private String title;
 
+  @NotBlank
   private String artist;
 
   private URL publicUrl;
 
+
+  public Track() {
+  }
+
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
+
 
   public Track() {
   }
