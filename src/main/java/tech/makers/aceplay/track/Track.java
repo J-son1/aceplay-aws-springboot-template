@@ -16,6 +16,7 @@ public class Track {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotBlank
   private String title;
 
   private String artist;
