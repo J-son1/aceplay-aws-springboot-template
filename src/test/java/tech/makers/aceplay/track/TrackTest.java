@@ -56,9 +56,17 @@ class TrackTest {
     Set<ConstraintViolation<Track>> violations = validator.validate(subject);
     assertFalse(violations.isEmpty());
 
-    Track subject2 = new Track("TEST TITLE", "TEST ARTIST", "http://TEST-URL.com");
-    violations = validator.validate(subject2);
-    assertTrue(violations.size() == 0);
+  }
+
+  @Test
+  void testArtistNotBlank() throws MalformedURLException {
+
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+
+    Track subject = new Track("TEST TITLE", " ", "http://TEST-URL.com");
+    Set<ConstraintViolation<Track>> violations = validator.validate(subject);
+    assertFalse(violations.isEmpty());
 
   }
 

@@ -19,6 +19,7 @@ public class Track {
   @NotBlank
   private String title;
 
+  @NotBlank
   private String artist;
 
   private URL publicUrl;
