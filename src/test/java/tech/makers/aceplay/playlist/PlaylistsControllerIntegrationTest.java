@@ -111,6 +111,17 @@ class PlaylistsControllerIntegrationTest {
 
   @Test
   @WithMockUser
+  void WhenLoggedIn_AndPlaylistNameNotGiven_PlaylistPostIsForbidden() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders.post("/api/playlists")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\": \" \"}"))
+      .andExpect(status().isBadRequest());
+    assertEquals(0, repository.count());
+  }
+
+  @Test
+  @WithMockUser
   void WhenLoggedIn_PlaylistPostCreatesNewPlaylist() throws Exception {
     mvc.perform(
         MockMvcRequestBuilders.post("/api/playlists")

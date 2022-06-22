@@ -2,11 +2,15 @@ package tech.makers.aceplay.playlist;
 
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+
 import tech.makers.aceplay.track.Track;
 import tech.makers.aceplay.user.User;
 
 public class PlaylistDTO {
   Long id;
+
+  @NotBlank(message = "Name should not be blank")
   String name;
   Boolean cool;
   Set<Track> tracks;

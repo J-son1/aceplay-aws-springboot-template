@@ -8,10 +8,19 @@ import tech.makers.aceplay.user.User;
 // import java.net.MalformedURLException;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 // https://www.youtube.com/watch?v=L4vkcgRnw2g&t=1099s
 class PlaylistTest {
+  
+  private Validator validator;
+  
   @Test
   void testConstructs() {
     User user = new User("username", "password");
@@ -20,6 +29,16 @@ class PlaylistTest {
     assertEquals(Set.of(), subject.getTracks());
     assertEquals(null, subject.getId());
     assertEquals(true, subject.getCool());
+  }
+
+  @Test
+  void testNameNotBlank() {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+
+    Playlist subject = new Playlist(" ", Set.of());
+    Set<ConstraintViolation<Playlist>> violations = validator.validate(subject);
+        assertFalse(violations.isEmpty());
   }
 
   @Test
