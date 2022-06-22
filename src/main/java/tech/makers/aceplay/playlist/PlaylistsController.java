@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import tech.makers.aceplay.track.Track;
 import tech.makers.aceplay.track.TrackRepository;
+import tech.makers.aceplay.user.User;
+import tech.makers.aceplay.user.UserRepository;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+
+import java.security.Principal;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+
 
 // https://www.youtube.com/watch?v=vreyOZxdb5Y&t=0s
 @RestController
@@ -23,14 +28,21 @@ public class PlaylistsController {
   @Autowired
   private TrackRepository trackRepository;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @GetMapping("/api/playlists")
-  public Iterable<Playlist> playlists() {
-    return playlistRepository.findAll();
+  public Iterable<Playlist> playlists(Principal principal) {
+    User user = userRepository.findByUsername(principal.getName());
+    return playlistRepository.findAllByUser(user);
   }
 
   @PostMapping("api/playlists")
-  public Playlist create(@Valid @RequestBody PlaylistDTO playlistDTO) throws Exception {
-    Playlist playlist = new Playlist();
+
+  public Playlist create(@RequestBody PlaylistDTO playlistDTO, Principal principal) {
+    User user = userRepository.findByUsername(principal.getName());
+    Playlist playlist = new Playlist(null, user);
+
     BeanUtils.copyProperties(playlistDTO, playlist);
     return playlistRepository.save(playlist);
   }
@@ -68,6 +80,18 @@ public class PlaylistsController {
     playlistRepository.deleteById(id);
   }
 
+  @DeleteMapping(path = "/api/playlists/{id}/tracks/{trackId}")
+  public void deleteTrack(@PathVariable Long id, @PathVariable Long trackId) {
+    Playlist playlist = playlistRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "No playlist exists with id " + id));
+    Track track = trackRepository.findById(trackId)
+        .orElseThrow(
+            () -> new ResponseStatusException(NOT_FOUND, "No track exists with id " + trackId));
+    playlist.getTracks().remove(track);
+    playlistRepository.save(playlist);
+
+  }
+  
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   ResponseEntity<ConstraintViolationException> handleConstraintViolationException(ConstraintViolationException e) {

@@ -3,6 +3,8 @@ package tech.makers.aceplay.playlist;
 import org.junit.jupiter.api.Test;
 // import tech.makers.aceplay.playlist.Playlist;
 
+import tech.makers.aceplay.user.User;
+
 // import java.net.MalformedURLException;
 import java.util.Set;
 
@@ -22,7 +24,8 @@ class PlaylistTest {
 
   @Test
   void testConstructs() {
-    Playlist subject = new Playlist("Hello, world!", Set.of());
+    User user = new User("username", "password");
+    Playlist subject = new Playlist("Hello, world!", Set.of(), user);
     assertEquals("Hello, world!", subject.getName());
     assertEquals(Set.of(), subject.getTracks());
     assertEquals(null, subject.getId());
@@ -46,7 +49,8 @@ class PlaylistTest {
 
   @Test
   void testSetsCoolness() {
-    Playlist subject = new Playlist("Hello, world!");
+    User user = new User("username", "password");
+    Playlist subject = new Playlist("Hello, world!", user);
     assertEquals(true, subject.getCool());
 
     subject.setCool(false);
@@ -55,7 +59,8 @@ class PlaylistTest {
 
   @Test
   void testToString() {
-    Playlist subject = new Playlist("Hello, world!");
+    User user = new User("username", "password");
+    Playlist subject = new Playlist("Hello, world!", user);
     assertEquals(
         "Playlist[id=null name='Hello, world!']",
         subject.toString());

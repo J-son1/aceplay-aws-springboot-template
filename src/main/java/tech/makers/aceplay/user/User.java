@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import tech.makers.aceplay.playlist.Playlist;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,9 +13,7 @@ import java.util.Set;
 
 // https://www.youtube.com/watch?v=5r3QU09v7ig&t=1156s
 @Entity
-@Table(
-    name = "aceplay_user",
-    uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+@Table(name = "aceplay_user", uniqueConstraints = { @UniqueConstraint(columnNames = "username") })
 public class User implements UserDetails {
 
   @Id
@@ -24,7 +24,11 @@ public class User implements UserDetails {
 
   private String password;
 
-  protected User() {}
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private Set<Playlist> playlists;
+
+  protected User() {
+  }
 
   public User(String username, String password) {
     this.username = username;
