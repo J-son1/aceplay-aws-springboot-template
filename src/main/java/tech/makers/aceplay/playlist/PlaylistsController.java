@@ -33,7 +33,6 @@ public class PlaylistsController {
 
   @GetMapping("/api/playlists")
   public Iterable<Playlist> playlists(Principal principal) {
-    // this gets the current logged in user
     User user = userRepository.findByUsername(principal.getName());
     return playlistRepository.findAllByUser(user);
   }
@@ -81,6 +80,18 @@ public class PlaylistsController {
     playlistRepository.deleteById(id);
   }
 
+  @DeleteMapping(path = "/api/playlists/{id}/tracks/{trackId}")
+  public void deleteTrack(@PathVariable Long id, @PathVariable Long trackId) {
+    Playlist playlist = playlistRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "No playlist exists with id " + id));
+    Track track = trackRepository.findById(trackId)
+        .orElseThrow(
+            () -> new ResponseStatusException(NOT_FOUND, "No track exists with id " + trackId));
+    playlist.getTracks().remove(track);
+    playlistRepository.save(playlist);
+
+  }
+  
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   ResponseEntity<ConstraintViolationException> handleConstraintViolationException(ConstraintViolationException e) {
